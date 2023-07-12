@@ -17,6 +17,7 @@ public class User {
     private String firstname;
     private String lastname;
     private String imageUrl;
+    private String password;
 
     @OneToMany(mappedBy = "author")
     private List<Post> posts = new ArrayList<>();

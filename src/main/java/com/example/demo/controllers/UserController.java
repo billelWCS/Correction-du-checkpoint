@@ -1,8 +1,13 @@
 package com.example.demo.controllers;
 
+import com.example.demo.DTOs.UserDTO;
 import com.example.demo.models.User;
 import com.example.demo.services.UserService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +16,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("users")
+
 public class UserController {
     @Autowired
     UserService userService;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @GetMapping("")
     public ResponseEntity<List<User>> getAllUsers(){
@@ -23,12 +32,14 @@ public class UserController {
         );
     }
 
+
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById (@PathVariable Long id){
         User user = userService.getUserById(id);
         if (user != null)
             return new ResponseEntity<>(
-                    user,
+                    modelMapper.map(user, UserDTO.class),
                     HttpStatus.OK
             );
         else
